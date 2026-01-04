@@ -1,0 +1,7 @@
+for local use
+
+Mac and Linux
+export STORAGE_TYPE=local
+
+Win (Powershell)
+$env:STORAGE_TYPE = "local"

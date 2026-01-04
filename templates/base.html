@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title or "File Share" }}</title>
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <header>
+            <h2>ファイル共有Webアプリ</h2>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>ファイル共有用の自作Webアプリです。限られた範囲で使うことを想定しています。</p>
+            <p>使い方（ファイルの送り方）</p>
+            <ol>
+                <li>「あなたの名前」に名前を入力してください。略称でも大丈夫です。</li>
+                <li>「ファイルを選択」をクリックしてファイルを選択してください。英語環境だと「Choose File」です。</li>
+                <li>「アップロード」ボタンを押してください。</li>
+            </ol>
+            <p>© 2026 K.W. File Share Web App</p>
+        </footer>
+
+        <script>
+            const form = document.getElementById("upload-form");
+            const loading = document.getElementById("loading");
+            
+            form.addEventListener("submit", () => {
+                loading.style.display = "inline-flex";
+            });
+        </script>
+    </body>
+</html>

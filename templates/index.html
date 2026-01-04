@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="upload-section">
+    <h2>ファイルをアップロード</h2>
+
+    <form action="/upload" method="post" enctype="multipart/form-data" id="upload-form">
+        <input type="text" name="uploader" placeholder="あなたの名前" required>
+        <input type="file" name="file" id="choose-file-btn" required>
+        <button type="submit">アップロード</button>
+    </form>
+
+    <div id="loading" style="display:none;" class="loading-inline">
+        <span class="loading-text">アップロード中...</span>
+        <span class="spinner"></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="list-section">
+    <h2>アップロード済みファイル</h2>
+
+    {% if files %}
+        <ul class="file-list">
+            {% for file in files %}
+                <li>
+                    <span>{{ file.name }} ({{ file.size }} KB) - {{ file.uploader }}</span>
+                    <a href="/download/{{ file.name }}" target="_blank">ダウンロード</a>
+                    <form action="/delete/{{ file.name }}" method="post" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
+                        <button type="submit">削除</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>まだファイルがありません。</p>
+    {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+body {
+    font-family: sans-serif;
+    font-size: medium;
+    margin: 0;
+    padding: 0;
+    background: #fafafa;
+}
+
+header {
+    background: #4a90e2;
+    color: white;
+    padding: 1rem;
+}
+
+main {
+    padding: 1rem;
+}
+
+.upload-section, .list-section {
+    margin-bottom: 2rem;
+}
+
+input {
+    padding: 0.5rem 1rem;
+}
+
+#choose-file-btn::file-selector-button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #357ab8;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.file-list li {
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: start;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    gap: 1rem;
+}
+
+footer {
+    padding: 1rem;
+}
+
+.loading-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 3px solid #ddd;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
