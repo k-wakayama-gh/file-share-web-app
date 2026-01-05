@@ -1,3 +1,8 @@
+import os
+
+print("ENV CHECK:", os.environ.keys())
+print("AZURE_STORAGE_CONNECTION_STRING =", os.getenv("AZURE_STORAGE_CONNECTION_STRING"))
+
 # main.py
 from fastapi import FastAPI, UploadFile, File, Request, HTTPException, Form
 from fastapi.responses import RedirectResponse, StreamingResponse
