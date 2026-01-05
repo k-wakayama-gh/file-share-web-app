@@ -35,11 +35,8 @@ async def index(request: Request):
 
 
 @app.post("/upload")
-async def upload_file(
-    file: UploadFile = File(...),
-    uploader: str = Form(...)
-):
-    storage.upload(file.filename, file.file, {"uploader": uploader})
+async def upload_file(file: UploadFile = File(...)):
+    storage.upload(file.filename, file.file)
     # return {"message": "uploaded"}
     return RedirectResponse(url="/", status_code=303)
 

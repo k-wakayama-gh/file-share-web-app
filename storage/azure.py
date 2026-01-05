@@ -16,14 +16,13 @@ class AzureBlobStorage(Storage):
         for blob in self.container_client.list_blobs():
             files.append({
                 "name": blob.name,
-                "size": round(blob.size / 1024, 1),
-                "uploader": blob.metadata.get("uploader") if blob.metadata else "不明"
+                "size": round(blob.size / (1024 * 1024), 1),
             })
         return files
 
-    def upload(self, filename, fileobj, metadata):
+    def upload(self, filename, fileobj):
         blob_client = self.container_client.get_blob_client(filename)
-        blob_client.upload_blob(fileobj, overwrite=True, metadata=metadata)
+        blob_client.upload_blob(fileobj, overwrite=True)
 
     def delete(self, filename):
         blob_client = self.container_client.get_blob_client(filename)

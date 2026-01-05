@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import BinaryIO
 
 class Storage(ABC):
     @abstractmethod
@@ -7,14 +6,13 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def upload(self, filename: str, fileobj: BinaryIO, metadata: dict):
+    def upload(self, filename, fileobj):
         pass
 
     @abstractmethod
-    def delete(self, filename: str):
+    def delete(self, filename):
         pass
 
     @abstractmethod
-    def open(self, filename: str):
-        """読み取り用のファイルオブジェクトを返す"""
+    def open(self, filename):
         pass

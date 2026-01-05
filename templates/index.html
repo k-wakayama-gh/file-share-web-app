@@ -5,8 +5,8 @@
     <h2>ファイルをアップロード</h2>
 
     <form action="/upload" method="post" enctype="multipart/form-data" id="upload-form">
-        <input type="text" name="uploader" placeholder="あなたの名前" required>
-        <input type="file" name="file" id="choose-file-btn" required>
+        <input type="text" name="uploader" placeholder="あなたの名前" hidden>
+        <input type="file" name="file" class="input-file" required>
         <button type="submit">アップロード</button>
     </form>
 
@@ -25,8 +25,10 @@
         <ul class="file-list">
             {% for file in files %}
                 <li>
-                    <span>{{ file.name }} ({{ file.size }} KB) - {{ file.uploader }}</span>
-                    <a href="/download/{{ file.name }}" target="_blank">ダウンロード</a>
+                    <span>{{ file.name }} ({{ file.size }} MB)</span>
+                    <form action="/download/{{ file.name }}">
+                        <button type="submit">ダウンロード</button>
+                    </form>
                     <form action="/delete/{{ file.name }}" method="post" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
                         <button type="submit">削除</button>
                     </form>
