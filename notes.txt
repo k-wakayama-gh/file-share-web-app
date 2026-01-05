@@ -1,7 +1,5 @@
-for local use
+Set these environment variables for deployment to azure app service
 
-Mac and Linux
-export STORAGE_TYPE=local
-
-Win (Powershell)
-$env:STORAGE_TYPE = "local"
+AZURE_STORAGE_CONNECTION_STRING = [actual connection string]
+AZURE_STORAGE_CONTAINER = [actual container name]
+STORAGE_TYPE = azure
