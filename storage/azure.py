@@ -1,7 +1,7 @@
 from storage.base import Storage
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
+from datetime import datetime, timedelta
 import os
-import io
 
 class AzureBlobStorage(Storage):
     def __init__(self):
@@ -28,7 +28,22 @@ class AzureBlobStorage(Storage):
         blob_client = self.container_client.get_blob_client(filename)
         blob_client.delete_blob()
 
-    def open(self, filename):
+    def get_sas_url(self, filename, expires_in_seconds=3600):
         blob_client = self.container_client.get_blob_client(filename)
-        stream = blob_client.download_blob()
-        return io.BytesIO(stream.readall())
+
+        account_name = blob_client.account_name
+        account_key = blob_client.credential.account_key
+
+        sas_token = generate_blob_sas(
+            account_name=account_name,
+            container_name=self.container_client.container_name,
+            blob_name=filename,
+            account_key=account_key,
+            permission=BlobSasPermissions(read=True),
+            expiry=datetime.utcnow() + timedelta(seconds=expires_in_seconds)
+        )
+
+        return f"{blob_client.url}?{sas_token}"
+    
+    def open(self, filename):
+        raise NotImplementedError()

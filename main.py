@@ -53,28 +53,29 @@ async def delete_file(filename: str):
 
 @app.get("/download/{filename}")
 async def download_file(filename: str):
-    try:
-        fileobj = storage.open(filename)
+    media_type, _ = mimetypes.guess_type(filename)
+    if not media_type:
+        media_type = "application/octet-stream"
 
-        media_type, _ = mimetypes.guess_type(filename)
-        if media_type is None:
-            media_type = "application/octet-stream"
+    quoted = quote(filename)
 
-        quoted = quote(filename)
-
-        return StreamingResponse(
-            fileobj,
-            media_type=media_type,
-            headers={
-                "Content-Disposition":
-                    "attachment; "
-                    f"filename*=UTF-8''{quoted}"
-            },
-            background=BackgroundTask(fileobj.close)
-        )
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="File not found")
+    if STORAGE_TYPE == "azure":
+        # SAS URL にリダイレクト
+        sas_url = storage.get_sas_url(filename)
+        response = RedirectResponse(sas_url)
+        response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{quoted}"
+        return response
+    else:
+        # ローカルストレージの場合は StreamingResponse
+        try:
+            fileobj = storage.open(filename)
+            return StreamingResponse(
+                fileobj,
+                media_type=media_type,
+                headers={"Content-Disposition": f"attachment; filename*=UTF-8''{quoted}"}
+            )
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="File not found")
 
 
 
