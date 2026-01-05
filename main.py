@@ -1,8 +1,3 @@
-import os
-
-print("ENV CHECK:", os.environ.keys())
-print("AZURE_STORAGE_CONNECTION_STRING =", os.getenv("AZURE_STORAGE_CONNECTION_STRING"))
-
 # main.py
 from fastapi import FastAPI, UploadFile, File, Request, HTTPException, Form
 from fastapi.responses import RedirectResponse, StreamingResponse
@@ -22,11 +17,7 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 STORAGE_TYPE = os.getenv("STORAGE_TYPE", "local")
-
-if STORAGE_TYPE == "azure":
-    storage = AzureBlobStorage()
-else:
-    storage = LocalStorage()
+storage = None
 
 
 
@@ -76,6 +67,15 @@ async def download_file(filename: str):
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="File not found")
 
+
+
+@app.on_event("startup")
+def startup():
+    global storage
+    if STORAGE_TYPE == "azure":
+        storage = AzureBlobStorage()
+    else:
+        storage = LocalStorage()
 
 
 
