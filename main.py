@@ -4,6 +4,7 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from starlette.background import BackgroundTask
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from urllib.parse import quote
 import mimetypes
 import uvicorn
 import os
@@ -30,11 +31,13 @@ async def index(request: Request):
     )
 
 
+
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     storage.upload(file.filename, file.file)
     # return {"message": "uploaded"}
     return RedirectResponse(url="/", status_code=303)
+
 
 
 @app.post("/delete/{filename}")
@@ -47,6 +50,7 @@ async def delete_file(filename: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
 @app.get("/download/{filename}")
 async def download_file(filename: str):
     try:
@@ -56,14 +60,19 @@ async def download_file(filename: str):
         if media_type is None:
             media_type = "application/octet-stream"
 
+        quoted = quote(filename)
+
         return StreamingResponse(
             fileobj,
             media_type=media_type,
             headers={
-                "Content-Disposition": f'attachment; filename="{filename}"'
+                "Content-Disposition":
+                    "attachment; "
+                    f"filename*=UTF-8''{quoted}"
             },
             background=BackgroundTask(fileobj.close)
         )
+
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="File not found")
 

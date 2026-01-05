@@ -26,10 +26,10 @@
             {% for file in files %}
                 <li>
                     <span>{{ file.name }} ({{ file.size }} MB)</span>
-                    <form action="/download/{{ file.name }}">
+                    <form action="/download/{{ file.name | urlencode }}">
                         <button type="submit">ダウンロード</button>
                     </form>
-                    <form action="/delete/{{ file.name }}" method="post" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
+                    <form action="/delete/{{ file.name | urlencode }}" method="post" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
                         <button type="submit">削除</button>
                     </form>
                 </li>
