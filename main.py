@@ -5,6 +5,7 @@ from starlette.background import BackgroundTask
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import quote
+from typing import List
 import mimetypes
 import uvicorn
 import os
@@ -32,10 +33,19 @@ async def index(request: Request):
 
 
 
+# @app.post("/upload")
+# async def upload_file(file: UploadFile = File(...)):
+#     storage.upload(file.filename, file.file)
+#     # return {"message": "uploaded"}
+#     return RedirectResponse(url="/", status_code=303)
+
+
+
 @app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    storage.upload(file.filename, file.file)
-    # return {"message": "uploaded"}
+async def upload_files(files: List[UploadFile] = File(...)):
+    for file in files:
+        storage.upload(file.filename, file.file)
+
     return RedirectResponse(url="/", status_code=303)
 
 
